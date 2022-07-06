@@ -10,6 +10,6 @@ mongoClient.connect(()=>{
     db = mongoClient.db(process.env.DATABASE);
 })
 
-const objectid = ObjectId;
+const objectid = ObjectId();
 
 export {objectid, db};
