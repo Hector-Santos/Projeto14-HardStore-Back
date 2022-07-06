@@ -1,0 +1,30 @@
+{
+  "name": "projeto14-hardstore-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hector-Santos/Projeto14-HardStore-Back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hector-Santos/Projeto14-HardStore-Back/issues"
+  },
+  "homepage": "https://github.com/Hector-Santos/Projeto14-HardStore-Back#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "joi": "^17.6.0",
+    "mongodb": "^4.7.0",
+    "nodemon": "^2.0.19",
+    "uuid": "^8.3.2"
+  }
+}
