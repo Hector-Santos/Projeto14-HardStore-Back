@@ -4,7 +4,8 @@ import {db} from '../dbStore/mongo.js';
 export async function Home(req, res){
     
 
-    await db.collection("usuarios").insertOne(req.body);
+    const produtos = await db.collection("produtos").find({}).toArray();
 
-    res.sendStatus(200);
+    console.table(produtos)
+    res.status(200).send(produtos);
 }
