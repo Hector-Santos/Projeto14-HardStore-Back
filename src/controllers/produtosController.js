@@ -13,5 +13,5 @@ export async function Pesquisa(req, res){
         }
     })
     console.log("LISTA", listaFiltrada)
-    res.status(200).send(produtos);
+    res.status(200).send({produtos, valor:34});
 }
