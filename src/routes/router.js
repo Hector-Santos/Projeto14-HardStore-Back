@@ -1,11 +1,10 @@
-import express from 'express';
-import authRouter from './authRouter.js';
+import  express from "express";
+import authRouter from "./authRouter.js";
+import storeRouter from './storeRouter.js';
 
+const App = express.Router();
 
+App.use(authRouter);
+App.use(storeRouter);
 
-const router = express.Router();
-router.use(authRouter);
-
-
-
-export default router;
+export default App;
