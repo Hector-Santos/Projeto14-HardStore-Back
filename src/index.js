@@ -1,5 +1,5 @@
 import express from 'express';
-import router from './routes/router.js';
+import router from './routers/router.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import {Pesquisa}  from './controllers/produtosController.js';
