@@ -26,9 +26,6 @@ export async function getCart(req, res){
 
     const produtosEstoque = await db.collection("produtos").find().toArray();
     
-    produtosEstoque.forEach(element => {
-        if((element._id)=="62c70236430d18a2f4292138"){console.log(1)}
-    });
 
     let itensCart = [];
 
@@ -50,12 +47,19 @@ export async function getCart(req, res){
 
 
 export async function updateCart(req, res){
-
+    console.log(req.body)
+    const {id, qtd} = req.body;
     const {_id} = res.locals.token;
 
+    const bdAtual = await db.collection("cart").findOne({_id})
 
-
-    console.log("UPDATE", req.headers.authorization, _id)
+    bdAtual.item.forEach(element => {
+        if(element._id == id){
+            console.log("SHDUAIDGSAIUD");
+            element.quantidade = qtd;
+        }
+    });
+    await db.collection("cart").updateOne({_id}, {$set:{item:bdAtual.item}})
 
     res.status(200).send("OK")
     return

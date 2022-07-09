@@ -8,10 +8,10 @@ export async function validarToken(req, res, next){
     
     const verifyUser = await db.collection("sessions").findOne({token});
 
-    if(verifyUser.error){
+    if(!verifyUser){
         return res.sendStatus(401);
     }
 
-    res.locals.token = verifyUser;
+    res.locals.token = (verifyUser)|| null ;
     next();
 }
