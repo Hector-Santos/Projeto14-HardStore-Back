@@ -6,7 +6,7 @@ import { validarToken } from '../middlewares/validarToken.js';
 
 const storeRouter = express.Router();
 storeRouter.get("/search", searchProduct);
-storeRouter.get("/cart", getCart);
+storeRouter.get("/cart",validarToken, getCart);
 storeRouter.put("/cart/",validarToken, updateCart);
 
 
