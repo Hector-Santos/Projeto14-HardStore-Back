@@ -1,20 +1,16 @@
 import express from 'express';
-import router from './routes/router.js';
-import dotenv from 'dotenv';
+import App from './routes/router.js';
 import cors from 'cors';
-import {Pesquisa}  from './controllers/produtosController.js';
 
 const server = express();
+
 server.use(cors())
 server.use(express.json());
-server.use(router);
 
-server.get("/",);
-
-server.get("/produtos", Pesquisa);
-
+server.use(App);
 
 const PORT = process.env.PORT || 5001;
+
 server.listen(PORT, () => {
   console.log('Server is listening on port 5000.');
 });

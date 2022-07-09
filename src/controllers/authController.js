@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import {db} from "../dbStore/mongo.js"
+import { ObjectId } from 'mongodb';
 
 
 export async function signUp(req, res) {
@@ -26,7 +27,8 @@ export async function signIn(req, res) {
   if (user && bcrypt.compareSync(password, user.password)) {
     const token = uuid();
 
-    await db.collection('sessions').insertOne({ token, userId: user._id });
+    await db.collection("sessions").deleteOne({"_id": ObjectId(user._id)});
+    await db.collection('sessions').insertOne({ token, "_id": user._id });
     
     res.send(token);
   } else {
