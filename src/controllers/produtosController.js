@@ -64,3 +64,9 @@ export async function updateCart(req, res){
     res.status(200).send("OK")
     return
 }
+
+export async function getProdutos(req, res){
+    const produtos = await db.collection("produtos").find().toArray();
+    res.status(200).send({produtos});
+
+}
