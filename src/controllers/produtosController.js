@@ -21,52 +21,65 @@ export async function searchProduct(req, res){
 export async function getCart(req, res){
     const token =  res.locals.token 
     const produtos = await db.collection("cart").findOne({"_id":token._id});
-
-    let itens = (produtos) && produtos.item.map(e=>{return e._id})
-
-    const produtosEstoque = await db.collection("produtos").find().toArray();
     
 
-    let itensCart = [];
-
-    for (let i = 0; i < itens.length; i++) {
-        for (let j = 0; j < produtosEstoque.length; j++) {
-            if(produtosEstoque[j]._id == itens[i]){
-                console.log(produtos.item[i].quantidade)
-                produtosEstoque[j]['qtd'] = produtos.item[i].quantidade;
-                itensCart.push(produtosEstoque[j]);
-            }
-        }
-        
-    }
-
-
-
-    res.status(200).send(itensCart);
+    res.status(200).send(produtos.item);
 }
 
 
 export async function updateCart(req, res){
-    console.log(req.body)
     const {id, qtd} = req.body;
     const {_id} = res.locals.token;
 
     const bdAtual = await db.collection("cart").findOne({_id})
-
-    bdAtual.item.forEach(element => {
-        if(element._id == id){
-            console.log("SHDUAIDGSAIUD");
-            element.quantidade = qtd;
-        }
-    });
+    if(bdAtual.item){
+        bdAtual.item.forEach(element => {
+            if(element._id == id){
+                element.quantidade = qtd;
+            }
+        });
+    }
+    
     await db.collection("cart").updateOne({_id}, {$set:{item:bdAtual.item}})
 
     res.status(200).send("OK")
     return
 }
 
+export async function postCompras(req, res){
+    const {id, qtd} = req.body;
+    const {_id} = res.locals.token;
+
+    const bdAtual = await db.collection("cart").findOne({_id})
+    //await db.collection("compras").insertOne()
+
+    await db.collection("cart").deleteOne({"_id": ObjectId(_id)});
+    await db.collection('compras').insertOne({bdAtual});
+
+    res.status(200).send("OK");
+    return
+}
+
 export async function getProdutos(req, res){
-    const produtos = await db.collection("produtos").find().toArray();
-    res.status(200).send({produtos});
+
+    const token =  res.locals.token 
+
+    const produtosEstoque = await db.collection("produtos").find().toArray();
+    
+    res.status(200).send(produtosEstoque)
+}
+
+export async function addCart(req, res){
+    const {token, _id} =  res.locals.token 
+    const {item} = req.body;
+    console.log("item", item)
+    const bd = await db.collection("cart").findOne({"_id": ObjectId(_id)});
+    if(!bd){
+    await db.collection("cart").insertOne({"_id": ObjectId(_id)});
+
+    }
+    await db.collection("cart").updateOne({"_id":_id}, {$set:{item:req.body}})
+    
+    res.sendStatus(201)
 
 }
