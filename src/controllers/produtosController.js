@@ -61,6 +61,7 @@ export async function postCompras(req, res){
 }
 
 export async function getProdutos(req, res){
+
     const token =  res.locals.token 
 
     const produtosEstoque = await db.collection("produtos").find().toArray();
@@ -80,4 +81,5 @@ export async function addCart(req, res){
     await db.collection("cart").updateOne({"_id":_id}, {$set:{item:req.body}})
     
     res.sendStatus(201)
+
 }

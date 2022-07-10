@@ -1,6 +1,8 @@
 import express from 'express';
 import {searchProduct, getCart, updateCart, postCompras, getProdutos, addCart} from '../controllers/produtosController.js';
+import { validarCart } from '../middlewares/validarCart.js';
 import { validarToken } from '../middlewares/validarToken.js';
+
 
 
 const storeRouter = express.Router();
