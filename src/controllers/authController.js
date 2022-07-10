@@ -21,7 +21,6 @@ export async function signUp(req, res) {
 }
 
 export async function signIn(req, res) {
-  console.log("ola")
   const { email, password } = req.body;
 
   const user = await db.collection('users').findOne({ email });
