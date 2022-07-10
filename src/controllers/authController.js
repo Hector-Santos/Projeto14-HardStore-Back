@@ -25,8 +25,7 @@ export async function signIn(req, res) {
   const { email, password } = req.body;
 
   const user = await db.collection('users').findOne({ email });
-  //const match = bcrypt.compareSync(password, user.password)
-  if (user ) {
+  if (user && bcrypt.compareSync(password, user.password)) {
     const token = uuid();
 
     await db.collection("sessions").deleteOne({"_id": ObjectId(user._id)});
