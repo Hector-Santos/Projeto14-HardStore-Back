@@ -13,5 +13,6 @@ export async function validarToken(req, res, next){
     }
 
     res.locals.token = (verifyUser)|| null ;
+    res.locals._id = verifyUser._id
     next();
 }

@@ -70,16 +70,17 @@ export async function getProdutos(req, res){
 }
 
 export async function addCart(req, res){
-    const {token, _id} =  res.locals.token 
-    const {item} = req.body;
+    const token =  res.locals.token 
+    const _id =  res.locals.token
+    const item = req.body;
     console.log("item", item)
-    const bd = await db.collection("cart").findOne({"_id": ObjectId(_id)});
-    if(!bd){
-    await db.collection("cart").insertOne({"_id": ObjectId(_id)});
+    const carrinho = await db.collection("cart").findOne({userId: _id});
+    if(!carrinho){
+    await db.collection("cart").insertOne({userId: _id, produtos:[{produto:item, quantidade:1}]});
 
     }
-    await db.collection("cart").updateOne({"_id":_id}, {$set:{item:req.body}})
-    
+    await db.collection("cart").updateOne({userId: _id}, {$push: {produtos: {produto:item, quantidade:1}}})
+
     res.sendStatus(201)
 
 }
