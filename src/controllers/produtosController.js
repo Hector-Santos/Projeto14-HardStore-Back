@@ -71,16 +71,30 @@ export async function getProdutos(req, res){
 
 export async function addCart(req, res){
     const token =  res.locals.token 
-    const _id =  res.locals.token
-    const item = req.body;
-    console.log("item", item)
-    const carrinho = await db.collection("cart").findOne({userId: _id});
+    const userId =  res.locals.userId
+    const item = ObjectId(req.body.id) 
+    const carrinho = await db.collection("cart").findOne({userId: userId});
     if(!carrinho){
-    await db.collection("cart").insertOne({userId: _id, produtos:[{produto:item, quantidade:1}]});
-
+    await db.collection("cart").insertOne({userId: userId, produtos:[{produto:item, quantidade:1}]});
+    return  res.sendStatus(201)
+    }else{
+        await db.collection("cart").updateOne({userId: userId}, {$push: {produtos: {produto:item, quantidade:1}}})
+        res.sendStatus(201)
     }
-    await db.collection("cart").updateOne({userId: _id}, {$push: {produtos: {produto:item, quantidade:1}}})
 
-    res.sendStatus(201)
+}
+
+export async function deleteCart(req, res){
+    const token =  res.locals.token 
+    const userId =  res.locals.userId
+    const item = ObjectId(req.body.id) 
+    const carrinho = await db.collection("cart").findOne({userId: userId});
+    const hasItem = await db.collection("cart").findOne({produto: item});
+    if(!carrinho || hasItem){
+    return  res.sendStatus(404)
+    }else{
+        await db.collection("cart").updateOne({userId: userId}, {$pull: {produtos: {produto:item, quantidade:1}}})
+        res.sendStatus(201)
+    }
 
 }

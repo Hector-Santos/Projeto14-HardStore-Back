@@ -5,7 +5,6 @@ export async function validarToken(req, res, next){
     const {authorization} = req.headers
     if(!authorization) return res.sendStatus(401)
     const token = authorization.replace("Bearer ", '');
-    
     const verifyUser = await db.collection("sessions").findOne({token});
 
     if(!verifyUser){
@@ -13,6 +12,6 @@ export async function validarToken(req, res, next){
     }
 
     res.locals.token = (verifyUser)|| null ;
-    res.locals._id = verifyUser._id
+    res.locals.userId = verifyUser._id
     next();
 }
