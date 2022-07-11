@@ -2,7 +2,7 @@ import {db} from '../dbStore/mongo.js';
 import { ObjectId } from 'mongodb';
 
 
-export async function searchProduct(req, res){
+/*export async function searchProduct(req, res){
     const {pesquisa} = req.body;
 
     const produtos = await db.collection("produtos").find({}).toArray();
@@ -16,7 +16,7 @@ export async function searchProduct(req, res){
     console.log("LISTA", listaFiltrada)
     res.status(200).send({produtos, valor:34});
 }
-
+*/
 
 export async function getCart(req, res){
     const token =  res.locals.token 
