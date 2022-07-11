@@ -116,6 +116,6 @@ export async function deleteCart(req, res){
         res.sendStatus(201)
     }
 
-    await db.collection("cart").updateOne({userId:session._id}, {$pull:{produtos:{produto:item}}})
-    console.log("session", session)
+    await db.collection("cart").updateOne({userId: userId}, {$pull:{produtos:{produto:item}}})
+
 }
