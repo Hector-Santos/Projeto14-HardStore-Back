@@ -9,7 +9,7 @@ const storeRouter = express.Router();
 //storeRouter.get("/search", searchProduct);
 storeRouter.get("/cart",validarToken, getCart);
 storeRouter.post("/cart",validarToken, addCart);
-storeRouter.delete("/cart",validarToken, deleteCart);
+storeRouter.put("/deletecart",validarToken, deleteCart);
 storeRouter.put("/cart/",validarToken, updateCart);
 storeRouter.post("/compras",validarToken, postCompras);
 storeRouter.get("/produtos",validarToken, getProdutos);

@@ -85,6 +85,11 @@ export async function addCart(req, res){
     const userId =  res.locals.userId
     const item = ObjectId(req.body.id) 
     const carrinho = await db.collection("cart").findOne({userId: userId});
+    const repetido = await db.collection("cart").findOne({produto: item});
+    if(repetido){
+     console.log("não repetiu")
+     return res.sendStatus(302)
+    }
     if(!carrinho){
     await db.collection("cart").insertOne({userId: userId, produtos:[{produto:item, quantidade:1}]});
     return  res.sendStatus(201)
@@ -104,7 +109,7 @@ export async function deleteCart(req, res){
     if(!carrinho || hasItem){
     return  res.sendStatus(404)
     }else{
-        await db.collection("cart").updateOne({userId: userId}, {$pull: {produtos: {produto:item, quantidade:1}}})
+        await db.collection("cart").updateOne({userId: userId}, {$pull: {produtos: {produto:item}}},false,true)
         res.sendStatus(201)
     }
 
