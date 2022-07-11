@@ -25,6 +25,10 @@ export async function getCart(req, res){
     
     //console.log("Estoque e cart", estoque, produtos.produtos)
     let listaCompras = [];
+    if(!produtos){
+        res.status(200);
+        return;
+    }
 
     for(let i=0; i<estoque.length; i++){
         for(let j=0; j<produtos.produtos.length; j++){
@@ -49,7 +53,6 @@ export async function updateCart(req, res){
             element.quantidade = qtd;
         }
     });
-    console.log(bdAtual)
     
    await db.collection("cart").updateOne({userId:_id}, {$set:bdAtual})
 
@@ -113,4 +116,6 @@ export async function deleteCart(req, res){
         res.sendStatus(201)
     }
 
+    await db.collection("cart").updateOne({userId:session._id}, {$pull:{produtos:{produto:item}}})
+    console.log("session", session)
 }
