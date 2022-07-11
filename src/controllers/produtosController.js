@@ -25,6 +25,10 @@ export async function getCart(req, res){
     
     //console.log("Estoque e cart", estoque, produtos.produtos)
     let listaCompras = [];
+    if(!produtos){
+        res.status(200);
+        return;
+    }
 
     for(let i=0; i<estoque.length; i++){
         for(let j=0; j<produtos.produtos.length; j++){
@@ -49,7 +53,6 @@ export async function updateCart(req, res){
             element.quantidade = qtd;
         }
     });
-    console.log(bdAtual)
     
    await db.collection("cart").updateOne({userId:_id}, {$set:bdAtual})
 
@@ -96,16 +99,12 @@ export async function addCart(req, res){
 }
 
 export async function deleteCart(req, res){
-    const token =  res.locals.token 
-    const userId =  res.locals.userId
-    const item = ObjectId(req.body.id) 
-    const carrinho = await db.collection("cart").findOne({userId: userId});
-    const hasItem = await db.collection("cart").findOne({produto: item});
-    if(!carrinho || hasItem){
-    return  res.sendStatus(404)
-    }else{
-        await db.collection("cart").updateOne({userId: userId}, {$pull: {produtos: {produto:item, quantidade:1}}})
-        res.sendStatus(201)
-    }
+    const item = ObjectId(req.body.id);
+    const token = (req.body.headers.Authorization).replace("Bearer ", '')
+    console.log("ITEM APAGADO", item, token)
 
+    const session = await db.collection("sessions").findOne({token});
+
+    await db.collection("cart").updateOne({userId:session._id}, {$pull:{produtos:{produto:item}}})
+    console.log("session", session)
 }
