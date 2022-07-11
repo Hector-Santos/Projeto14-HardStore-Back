@@ -64,13 +64,15 @@ export async function postCompras(req, res){
     const {id, qtd} = req.body;
     const {_id} = res.locals.token;
 
-    const bdAtual = await db.collection("cart").findOne({_id})
+    const bdAtual = await db.collection("cart").findOne({userId: _id});
     //await db.collection("compras").insertOne()
 
-    await db.collection("cart").deleteOne({"_id": ObjectId(_id)});
+    await db.collection("cart").deleteOne({userId: ObjectId(_id)});
     await db.collection('compras').insertOne({bdAtual});
 
-    res.status(200).send("OK");
+    const compra = await db.collection("compras").findOne({userId: _id});
+
+    res.status(200).send(compra);
     return
 }
 
