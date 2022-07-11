@@ -19,11 +19,22 @@ import { ObjectId } from 'mongodb';
 */
 
 export async function getCart(req, res){
-    const token =  res.locals.token 
-    const produtos = await db.collection("cart").findOne({"_id":token._id});
+    const {_id, token} =  res.locals.token 
+    const produtos = await db.collection("cart").findOne({userId:_id});
+    const estoque = await db.collection("produtos").find({}).toArray();
     
+    //console.log("Estoque e cart", estoque, produtos.produtos)
+    let listaCompras = [];
 
-    res.status(200).send(produtos.item);
+    for(let i=0; i<estoque.length; i++){
+        for(let j=0; j<produtos.produtos.length; j++){
+        if(estoque[i]._id.toString() == produtos.produtos[j].produto.toString()){
+            estoque[i]["qtd"] = produtos.produtos[j].quantidade;
+            listaCompras.push(estoque[i])
+        }
+    }
+}
+    res.status(200).send(listaCompras);
 }
 
 
@@ -31,16 +42,16 @@ export async function updateCart(req, res){
     const {id, qtd} = req.body;
     const {_id} = res.locals.token;
 
-    const bdAtual = await db.collection("cart").findOne({_id})
-    if(bdAtual.item){
-        bdAtual.item.forEach(element => {
-            if(element._id == id){
-                element.quantidade = qtd;
-            }
-        });
-    }
+    const bdAtual = await db.collection("cart").findOne({userId:_id})
+    const { produtos} = bdAtual;
+    bdAtual.produtos.forEach(element => {
+        if(element.produto == id){
+            element.quantidade = qtd;
+        }
+    });
+    console.log(bdAtual)
     
-    await db.collection("cart").updateOne({_id}, {$set:{item:bdAtual.item}})
+   await db.collection("cart").updateOne({userId:_id}, {$set:bdAtual})
 
     res.status(200).send("OK")
     return
